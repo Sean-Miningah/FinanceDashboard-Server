@@ -9,8 +9,8 @@ import morgan from "morgan";
 import kpiRoutes from "./routes/kpi.js";
 import productRoutes from "./routes/product.js";
 import transactionRoutes from "./routes/transaction.js"
-// import KPI from "./models/KPI.js";
-// import Product from "./models/Product.js"
+import KPI from "./models/KPI.js";
+import Product from "./models/Product.js"
 import Transaction from "./models/Transaction.js"
 import { kpis, products, transactions } from "./data/data.js"
 
@@ -29,7 +29,7 @@ app.use(cors());
 
 // MONGOOSE SETUP 
 
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 3000;
 
 // ROUTES
 app.use("/kpi", kpiRoutes);
@@ -38,14 +38,17 @@ app.use('/transaction', transactionRoutes);
 
 
 mongoose 
-  .connect(process.env.MONGO_URL)
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(async () => {
-    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
-
+    
     // await mongoose.connection.db.dropDatabase();
     // KPI.insertMany(kpis);
     // Product.insertMany(products);
     // Transaction.insertMany(transactions);
+    app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
   })
   .catch((error) => console.log(`${error} did not connect`));
 
